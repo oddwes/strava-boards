@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { login, isLoggedIn } from "../utils/PizzlyUtil"
+import Footer from "./Footer"
+
+import '../styling/strava.css';
+
+import strava_logo from "../assets/images/strava-logo.svg"
+
+const pizzlyLink = "https://github.com/Bearer/Pizzly"
+const footerText = "Oauth provided by Pizzly"
 
 const Login = () => {
   return (
-    <React.Fragment>
-      <h1>Hello!</h1>
-      <p>
-        Click the button bellow to retrieve your Strava profile using{" "}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/Bearer/Pizzly"
-        >
-          Pizzly
-        </a>
-        .
-      </p>
-      <button onClick={login}>Retrieve your Strava profile</button>
+    <div className="vertical-center">
+      <h3>Login and give me all your data</h3>
+      <button className="strava-button" onClick={login}>
+        <img src={strava_logo} width="50" height="50"/>
+        <span style={{fontWeight: "bold"}}>Login</span>
+      </button>
+      <Footer text={footerText} url={pizzlyLink}/>
       { isLoggedIn() ? <Redirect to="/" /> : null}
-    </React.Fragment>
+    </div>
   )
 }
 
