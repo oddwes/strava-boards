@@ -15,7 +15,7 @@ const Login = () => {
     <div className="vertical-center">
       <h3>Login and give me all your data</h3>
       <button className="strava-button" onClick={login}>
-        <img src={strava_logo} width="50" height="50"/>
+        <img src={strava_logo} width="50" height="50" alt="strava logo"/>
         <span style={{fontWeight: "bold"}}>Login</span>
       </button>
       <Footer text={footerText} url={pizzlyLink}/>
