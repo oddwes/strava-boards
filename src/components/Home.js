@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { getUser, getActivities } from "../utils/PizzlyUtil"
+import { getAuthId } from "../utils/PizzlyUtil"
+import { getUser, getActivities } from "../utils/StravaUtil"
 import { beginningOfMonth } from "../utils/DateUtil"
 import DatePicker from "react-datepicker"
 
@@ -12,25 +13,33 @@ const Home = () => {
   const [endDate, setEndDate] = useState(new Date())
 
   useEffect(() => {
-    getUser().then(response => response.json().then(object => setUsername(object.firstname)))
+    getUser({pizzly_auth_id: getAuthId()}).then(response => setUsername(response.data.athlete.first_name))
   })
 
   useEffect(() => {
-    getActivities({ after: startDate.getTime() / 1000, before: endDate.getTime() / 1000 }).then(response => { if (response.status === 200) { response.json().then(object => setActivities(object)) } })
+    getActivities({ pizzly_auth_id: getAuthId(), after: startDate, before: endDate })
+    .then(response => {
+      if (response.status === 200) {
+        const sortedActivities = response.data.activities.sort(function(a,b) {return new Date(b.created_at) - new Date(a.created_at)})
+        setActivities(sortedActivities)
+        console.log(sortedActivities)
+      }
+    })
   }, [startDate, endDate])
 
   const activityInfo = activities.map((activity, index) => (
     <tr key={index}>
-      <td>{activity.name}</td>
-      <td>{Math.round(activity.moving_time / 60)} min</td>
-      <td>{Math.round(activity.elapsed_time / 60)} min</td>
-      <td>{(activity.distance / 1000).toFixed(2)} km</td>
-      <td>{(activity.total_elevation_gain)} m</td>
+      <td>{activity.data.name}</td>
+      <td>{activity.created_at}</td>
+      <td>{Math.round(activity.data.moving_time / 60)} min</td>
+      <td>{Math.round(activity.data.elapsed_time / 60)} min</td>
+      <td>{(activity.data.distance / 1000).toFixed(2)} km</td>
+      <td>{(activity.data.total_elevation_gain)} m</td>
     </tr>
   ))
 
-  const totalDistance = (activities.map((activity) => activity.distance).reduce((a,b) => a + b, 0)/1000).toFixed(2)
-  const totalElevation = activities.map((activity) => activity.total_elevation_gain).reduce((a,b) => a + b, 0)
+  const totalDistance = (activities.map((activity) => activity.data.distance).reduce((a,b) => a + b, 0)/1000).toFixed(2)
+  const totalElevation = activities.map((activity) => activity.data.total_elevation_gain).reduce((a,b) => a + b, 0)
 
   const updateStartDate = ({ startDate }) => {
     setStartDate(startDate)
@@ -51,6 +60,7 @@ const Home = () => {
         <thead>
           <tr>
             <th>Ride Name</th>
+            <th>Date</th>
             <th>Moving Time</th>
             <th>Elapsed Time</th>
             <th>Distance</th>
@@ -64,15 +74,18 @@ const Home = () => {
           <tr></tr>
           <tr>
             <th></th>
+            <th></th>
             <th>Totals:</th>
           </tr>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th>Distance</th>
             <td>{totalDistance} km</td>
           </tr>
           <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th>Elevation</th>

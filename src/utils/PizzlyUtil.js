@@ -27,16 +27,6 @@ export const isLoggedIn = () => {
   return localStorage.getItem(AUTH_ID_KEY)
 };
 
-export const getUser = () => {
-  const authId = localStorage.getItem(AUTH_ID_KEY)
-  return strava
-    .auth(authId)
-    .get('/athlete')
-}
-
-export const getActivities = ({after}) => {
-  const authId = localStorage.getItem(AUTH_ID_KEY)
-  return strava
-    .auth(authId)
-    .get(`/athlete/activities?after=${after}`)
+export const getAuthId = () => {
+  return localStorage.getItem(AUTH_ID_KEY)
 }
