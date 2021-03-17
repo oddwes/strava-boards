@@ -5,6 +5,7 @@ import Login from "./components/Login"
 import Home from "./components/Home"
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (
