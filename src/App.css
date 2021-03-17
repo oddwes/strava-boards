@@ -41,3 +41,8 @@ button > img,
 button > span {
   vertical-align: middle;
 }
+
+[class*="strava-"] {
+  background-color: #FC5200;
+  color: white;
+}
