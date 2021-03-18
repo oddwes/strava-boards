@@ -21,12 +21,12 @@ const Home = () => {
 
   useEffect(() => {
     getActivities({ pizzly_auth_id: getAuthId(), after: startDate, before: endDate })
-    .then(response => {
-      if (response.status === 200) {
-        const sortedActivities = response.data.activities.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
-        setActivities(sortedActivities)
-      }
-    })
+      .then(response => {
+        if (response.status === 200) {
+          const sortedActivities = response.data.activities.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
+          setActivities(sortedActivities)
+        }
+      })
   }, [startDate, endDate])
 
   const updateStartDate = ({ startDate }) => {
@@ -54,19 +54,34 @@ const Home = () => {
     ],
   }
 
+  const monthlyMetersCalculator = (monthIndex) => {
+    let activitiesForTheMonth = activities.filter((activity) => activity.data.start_date.split("-")[1] === String(monthIndex).padStart(2, "0"))
+    let monthlyMeters = activitiesForTheMonth.reduce((result, activity) => result + activity.data.total_elevation_gain, 0 )
+    if (monthlyMeters === 0 && monthIndex !== 0) {
+      return monthlyMetersCalculator(monthIndex - 1)
+    } else {
+      return monthlyMeters
+    }
+  }
+  const actualMonthlyMeters = monthIndices.map(monthlyMetersCalculator)
+
+  const expectMonthlyMeters = monthIndices.map((monthIndex) => {
+    return 10000/12 * monthIndex
+  })
+
   const goalData = {
     labels: monthNames,
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        label: 'Actual',
+        data: actualMonthlyMeters,
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 0.2)',
       },
       {
-        label: '# of People',
-        data: [1, 9, 13, 32, 2, 3],
+        label: 'Required',
+        data: expectMonthlyMeters,
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 0.2)',

@@ -8,7 +8,7 @@ export const Activities = ({activities}) => {
       <td>{Math.round(activity.data.moving_time / 60)} min</td>
       <td>{Math.round(activity.data.elapsed_time / 60)} min</td>
       <td>{(activity.data.distance / 1000).toFixed(2)} km</td>
-      <td>{(activity.data.total_elevation_gain)} m</td>
+      <td>{activity.data.total_elevation_gain} m</td>
     </tr>
   ))
 
