@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { getAuthId } from "../utils/PizzlyUtil"
 import { getUser, getActivities } from "../utils/StravaUtil"
-import { beginningOfMonth } from "../utils/DateUtil"
+import { beginningOfMonth, today } from "../utils/DateUtil"
 import DatePicker from "react-datepicker"
 import { Activities } from "./Activities"
-import { Doughnut, Line } from 'react-chartjs-2';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -33,37 +32,19 @@ const Home = () => {
     setStartDate(startDate)
   }
 
-  const data = {
-    labels: ['Indoor Rides', 'Outdoor Rides'],
-    datasets: [
-      {
-        label: '# of Rides',
-        data: [
-          activities.filter((activity) => activity.data.trainer === true).length,
-          activities.filter((activity) => activity.data.trainer === false).length,
-        ],
-        backgroundColor: [
-          "#E7F8F3",
-          "#14939A",
-        ],
-        borderColor: [
-          "#14939A", 'grey'
-        ],
-        borderWidth: 1,
-      },
-    ],
-  }
-
   return (
     <React.Fragment>
       <h3>Welcome {username}!</h3>
       <div>
-        <span>You've done {activities.length} activities in this date range:</span>
+        Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => updateStartDate({ startDate: date })} />
       </div>
-      <DatePicker selected={startDate} maxDate={endDate} onChange={date => updateStartDate({ startDate: date })} />
-      <DatePicker selected={endDate} minDate={startDate} onChange={date => setEndDate(date)} />
-      <Activities activities={activities} />
-      <Doughnut data={data} />
+      <div>
+        End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
+      </div>
+      <br/>
+      <div>
+        <Activities activities={activities} />
+      </div>
     </React.Fragment>
   )
 }

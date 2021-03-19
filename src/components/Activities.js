@@ -1,4 +1,5 @@
 import React from 'react'
+import { Doughnut } from 'react-chartjs-2';
 
 export const Activities = ({activities}) => {
   const activityInfo = activities.map((activity, index) => (
@@ -15,9 +16,41 @@ export const Activities = ({activities}) => {
   const totalDistance = (activities.map((activity) => activity.data.distance).reduce((a, b) => a + b, 0) / 1000).toFixed(2)
   const totalElevation = activities.map((activity) => activity.data.total_elevation_gain).reduce((a, b) => a + b, 0)
 
+  const data = {
+    labels: ['Indoor Rides', 'Outdoor Rides'],
+    datasets: [
+      {
+        label: '# of Rides',
+        data: [
+          activities.filter((activity) => activity.data.trainer === true).length,
+          activities.filter((activity) => activity.data.trainer === false).length,
+        ],
+        backgroundColor: [
+          "#E7F8F3",
+          "#14939A",
+        ],
+        borderColor: [
+          "#14939A", 'grey'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  }
+
+  const options = {
+    title: {
+      display: true,
+      text: "Indoor/Outdoor Breakdown",
+      fontSize: 24
+    },
+    legend: {
+      display: false
+    }
+  }
+
   return (
     <React.Fragment>
-      <table>
+      <table style={{width: "75%"}}>
         <thead>
           <tr>
             <th>Ride Name</th>
@@ -32,11 +65,18 @@ export const Activities = ({activities}) => {
           {activityInfo}
         </tbody>
         <tfoot>
-          <tr></tr>
+          <br/>
           <tr>
             <th></th>
             <th></th>
             <th>Totals:</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Activities</th>
+            <td>{activities.length}</td>
           </tr>
           <tr>
             <th></th>
@@ -54,6 +94,10 @@ export const Activities = ({activities}) => {
           </tr>
         </tfoot>
       </table>
+      <br/>
+      <div style={{width: "50%"}}>
+        <Doughnut data={data} options={options}/>
+      </div>
     </React.Fragment>
   )
 }
