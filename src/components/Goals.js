@@ -14,7 +14,6 @@ const Goals = () => {
         if (response.status === 200) {
           const sortedActivities = response.data.activities.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
           setActivities(sortedActivities)
-          console.log(sortedActivities)
         }
       })
   }, [])
