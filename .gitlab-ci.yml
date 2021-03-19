@@ -13,9 +13,6 @@ docker_image_build_release:
   only:
       - tags
   script:
-    - export REACT_APP_PIZZLY_HOST=$PIZZLY_HOST
-    - export REACT_APP_PIZZLY_SETUP_ID=$PIZZLY_SETUP_ID
-    - export REACT_APP_CACHE_PROXY_HOST=$CACHE_PROXY_HOST
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest
