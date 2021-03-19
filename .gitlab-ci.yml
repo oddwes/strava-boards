@@ -15,7 +15,13 @@ docker_image_build_release:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest
+    - /kaniko/executor \
+        --context $CI_PROJECT_DIR \
+        --dockerfile $CI_PROJECT_DIR/Dockerfile \
+        --destination $CI_REGISTRY_IMAGE:latest \
+        --build-arg PIZZLY_SETUP_ID=$PIZZLY_SETUP_ID \
+        --build-arg PIZZLY_HOST=$PIZZLY_HOST \
+        --build-arg CACHE_HOST=$CACHE_HOST \
 
 deploy:
   image: dtzar/helm-kubectl
