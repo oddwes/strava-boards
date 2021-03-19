@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { getAuthId } from "../utils/PizzlyUtil"
 import { getUser, getActivities } from "../utils/StravaUtil"
-import { monthNames, monthIndices, beginningOfMonth } from "../utils/DateUtil"
+import { beginningOfMonth } from "../utils/DateUtil"
 import DatePicker from "react-datepicker"
 import { Activities } from "./Activities"
 import { Doughnut, Line } from 'react-chartjs-2';
@@ -54,47 +54,8 @@ const Home = () => {
     ],
   }
 
-  const monthlyMetersCalculator = (monthIndex) => {
-    let activitiesForTheMonth = activities.filter((activity) => activity.data.start_date.split("-")[1] === String(monthIndex).padStart(2, "0"))
-    let monthlyMeters = activitiesForTheMonth.reduce((result, activity) => result + activity.data.total_elevation_gain, 0 )
-    if (monthlyMeters === 0 && monthIndex !== 0) {
-      return monthlyMetersCalculator(monthIndex - 1)
-    } else {
-      return monthlyMeters
-    }
-  }
-  const actualMonthlyMeters = monthIndices.map(monthlyMetersCalculator)
-
-  const expectMonthlyMeters = monthIndices.map((monthIndex) => {
-    return 10000/12 * monthIndex
-  })
-
-  const goalData = {
-    labels: monthNames,
-    datasets: [
-      {
-        label: 'Actual',
-        data: actualMonthlyMeters,
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
-      },
-      {
-        label: 'Required',
-        data: expectMonthlyMeters,
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
-      },
-    ],
-  }
-
   return (
     <React.Fragment>
-      <div className="strava-header py-4">
-        <h1>THE BEST STRAVA DASHBOARD EVER</h1>
-      </div>
-      <br />
       <h3>Welcome {username}!</h3>
       <div>
         <span>You've done {activities.length} activities in this date range:</span>
@@ -103,7 +64,6 @@ const Home = () => {
       <DatePicker selected={endDate} minDate={startDate} onChange={date => setEndDate(date)} />
       <Activities activities={activities} />
       <Doughnut data={data} />
-      <Line data={goalData} />
     </React.Fragment>
   )
 }
