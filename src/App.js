@@ -9,15 +9,23 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
+  const headerLinks = () => {
+    if(isLoggedIn()) {
+      return (
+        <React.Fragment>
+          <Link to="/" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Statistics |</h3></Link>
+          <Link to="/goals" className="pl-2" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Goals</h3></Link>
+        </React.Fragment>
+      )
+    }
+  }
+
   return (
     <div className="App">
       <Router>
         <div className="strava-header py-4">
           <h1>THE BEST STRAVA DASHBOARD EVER</h1>
-          <div>
-            <Link to="/" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Statistics |</h3></Link>
-            <Link to="/goals" className="pl-2" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Goals</h3></Link>
-          </div>
+          {headerLinks()}
         </div>
         <br />
         <Switch>
