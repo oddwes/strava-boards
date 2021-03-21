@@ -102,11 +102,11 @@ const Goals = () => {
           {
             loading ? (
               <React.Fragment>
-                <Col style={{ display: "flex", alignItems: "center" }}>
-                  <ClimbingBoxLoader color="#000000" loading={true} css={override} />
+                <Col className="p-4" style={{ display: "flex", alignItems: "center" }}>
+                  <ClimbingBoxLoader color="#000000" loading={true} css={override} size={25} />
                 </Col>
-                <Col style={{ display: "flex", alignItems: "center" }}>
-                  <BarLoader color="#000000" loading={true} css={override} />
+                <Col className="p-4" style={{ display: "flex", alignItems: "center" }}>
+                  <BarLoader color="#000000" loading={true} css={override} height={8} width={300} />
                 </Col>
               </React.Fragment>
             ) : (
