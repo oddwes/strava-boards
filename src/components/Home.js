@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker"
 import { Activities } from "./Activities"
 import PropagateLoader from "react-spinners/PropagateLoader";
 import { css } from "@emotion/react";
+import { Container, Col, Row } from "react-bootstrap";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -45,14 +46,16 @@ const Home = () => {
   `;
 
   return (
-    <React.Fragment>
+    <Container fluid>
       <h3>Welcome {username}!</h3>
-      <div>
-        Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => updateStartDate({ startDate: date })} />
-      </div>
-      <div>
-        End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
-      </div>
+      <Row className="justify-content-md-center">
+        <Col lg="2">
+          Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => updateStartDate({ startDate: date })} />
+        </Col>
+        <Col lg="2">
+          End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
+        </Col>
+      </Row>
       <br/>
       <div>
       {
@@ -63,7 +66,7 @@ const Home = () => {
         )
       }
       </div>
-    </React.Fragment>
+    </Container>
   )
 }
 

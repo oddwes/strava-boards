@@ -1,5 +1,6 @@
 import React from 'react'
 import { Doughnut } from 'react-chartjs-2';
+import { Table } from 'react-bootstrap';
 
 export const Activities = ({activities}) => {
   const activityInfo = activities.map((activity, index) => (
@@ -50,7 +51,7 @@ export const Activities = ({activities}) => {
 
   return (
     <React.Fragment>
-      <table style={{width: "75%"}}>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Ride Name</th>
@@ -63,37 +64,26 @@ export const Activities = ({activities}) => {
         </thead>
         <tbody>
           {activityInfo}
-        </tbody>
-        <tfoot>
           <br/>
           <tr>
-            <th></th>
-            <th></th>
             <th>Totals:</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
             <th>Activities</th>
             <td>{activities.length}</td>
           </tr>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
             <th>Distance</th>
             <td>{totalDistance} km</td>
           </tr>
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
             <th>Elevation</th>
             <td>{totalElevation} m</td>
           </tr>
+        </tbody>
+        <tfoot>
         </tfoot>
-      </table>
+      </Table>
       <br/>
       <div style={{width: "50%"}}>
         <Doughnut data={data} options={options}/>
