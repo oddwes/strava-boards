@@ -4,6 +4,8 @@ import { getUser, getActivities } from "../utils/StravaUtil"
 import { beginningOfMonth, today } from "../utils/DateUtil"
 import DatePicker from "react-datepicker"
 import { Activities } from "./Activities"
+import PropagateLoader from "react-spinners/PropagateLoader";
+import { css } from "@emotion/react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -13,17 +15,20 @@ const Home = () => {
   const [activities, setActivities] = useState([])
   const [startDate, setStartDate] = useState(beginningOfMonth())
   const [endDate, setEndDate] = useState(new Date())
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getUser({ pizzly_auth_id: getAuthId() }).then(response => setUsername(response.data.athlete.first_name))
   })
 
   useEffect(() => {
+    setLoading(true)
     getActivities({ pizzly_auth_id: getAuthId(), after: startDate, before: endDate })
       .then(response => {
         if (response.status === 200) {
           const sortedActivities = response.data.activities.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
           setActivities(sortedActivities)
+          setLoading(false)
         }
       })
   }, [startDate, endDate])
@@ -31,6 +36,13 @@ const Home = () => {
   const updateStartDate = ({ startDate }) => {
     setStartDate(startDate)
   }
+
+  const override = css`
+    display: block;
+    margin: auto;
+    border-color: red;
+    display: inline-block
+  `;
 
   return (
     <React.Fragment>
@@ -43,7 +55,13 @@ const Home = () => {
       </div>
       <br/>
       <div>
-        <Activities activities={activities} />
+      {
+        loading ? (
+          <PropagateLoader color="#000000" loading={true} css={override} />
+        ) : (
+          <Activities activities={activities} />
+        )
+      }
       </div>
     </React.Fragment>
   )
