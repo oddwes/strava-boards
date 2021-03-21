@@ -7,6 +7,7 @@ import Select from "react-select"
 import BarLoader from "react-spinners/BarLoader";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { css } from "@emotion/react";
+import { Container, Col, Row } from "react-bootstrap";
 
 const Goals = () => {
   const [activities, setActivities] = useState([])
@@ -85,35 +86,42 @@ const Goals = () => {
     display: block;
     margin: auto;
     border-color: red;
-    display: inline-block
   `;
 
   return (
     <React.Fragment>
-      <div style={{ width: "25%", position: "absolute", left: "50%", transform: "translate(-50%, -50%)" }}>
-        <Select options={years} value={selectedYear} onChange={yearChanged} />
-      </div>
-      {
-        loading ? (
-          <React.Fragment>
-            <div style={{ width: "50%", display: "inline-block" }}>
-              <ClimbingBoxLoader color="#000000" loading={true} css={override} />
-            </div>
-            <div style={{ width: "50%", display: "inline-block" }}>
-              <BarLoader color="#000000" loading={true} css={override} />
-            </div>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <div style={{ width: "50%", display: "inline-block" }}>
-              <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
-            </div>
-            <div style={{ width: "50%", display: "inline-block" }}>
-              <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
-            </div>
-          </React.Fragment>
-        )
-      }
+      <Container>
+        <Row className="justify-content-md-center">
+          <Col xs lg="2">
+            <Select options={years} value={selectedYear} onChange={yearChanged} />
+          </Col>
+        </Row>
+      </Container>
+      <Container fluid>
+        <Row>
+          {
+            loading ? (
+              <React.Fragment>
+                <Col style={{ display: "flex", alignItems: "center" }}>
+                  <ClimbingBoxLoader color="#000000" loading={true} css={override} />
+                </Col>
+                <Col style={{ display: "flex", alignItems: "center" }}>
+                  <BarLoader color="#000000" loading={true} css={override} />
+                </Col>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Col style={{ display: "flex", alignItems: "center" }}>
+                  <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
+                </Col>
+                <Col style={{ display: "flex", alignItems: "center" }}>
+                  <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
+                </Col>
+              </React.Fragment>
+            )
+          }
+        </Row>
+      </Container>
     </React.Fragment>
   )
 }
