@@ -12,9 +12,9 @@ import { Container, Col, Row } from "react-bootstrap";
 const Goals = () => {
   const [activities, setActivities] = useState([])
   const years = [
-    { value: "2021-01-01~2022-01-01", label: "2021" },
-    { value: "2020-01-01~2021-01-01", label: "2020" },
-    { value: "2019-01-01~2020-01-01", label: "2019" },
+    { value: "2021-01-01~2021-12-31", label: "2021" },
+    { value: "2020-01-01~2020-12-31", label: "2020" },
+    { value: "2019-01-01~2019-12-31", label: "2019" },
   ];
   const [selectedYear, setSelectedYear] = useState(years[0])
 

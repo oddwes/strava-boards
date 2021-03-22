@@ -64,7 +64,6 @@ export const Activities = ({activities}) => {
         </thead>
         <tbody>
           {activityInfo}
-          <br/>
           <tr>
             <th>Totals:</th>
             <th>Activities</th>
