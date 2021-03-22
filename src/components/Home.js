@@ -47,8 +47,10 @@ const Home = () => {
 
   return (
     <Container fluid>
-      <h3>Welcome {username}!</h3>
-      <Row className="justify-content-md-center">
+      {
+        loading ? (null) : (<h3>Welcome {username}!</h3>)
+      }
+      <Row className="justify-content-md-center p-4">
         <Col lg="2">
           Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => updateStartDate({ startDate: date })} />
         </Col>
@@ -56,15 +58,14 @@ const Home = () => {
           End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
         </Col>
       </Row>
-      <br/>
       <div>
-      {
-        loading ? (
-          <PropagateLoader color="#000000" loading={true} css={override} />
-        ) : (
-          <Activities activities={activities} />
-        )
-      }
+        {
+          loading ? (
+            <PropagateLoader color="#000000" loading={true} css={override} />
+          ) : (
+            <Activities activities={activities} />
+          )
+        }
       </div>
     </Container>
   )
