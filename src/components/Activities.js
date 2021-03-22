@@ -64,11 +64,17 @@ export const Activities = ({activities}) => {
         </thead>
         <tbody>
           {activityInfo}
+        </tbody>
+      </Table>
+      <Table striped bordered hover>
+        <thead>
           <tr>
             <th>Totals:</th>
             <th>Activities</th>
             <td>{activities.length}</td>
           </tr>
+        </thead>
+        <tbody>
           <tr>
             <td></td>
             <th>Distance</th>
@@ -80,8 +86,6 @@ export const Activities = ({activities}) => {
             <td>{totalElevation} m</td>
           </tr>
         </tbody>
-        <tfoot>
-        </tfoot>
       </Table>
       <br/>
       <div style={{width: "50%"}}>
