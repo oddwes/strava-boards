@@ -27,7 +27,7 @@ const Home = () => {
     getActivities({ pizzly_auth_id: getAuthId(), after: startDate, before: endDate })
       .then(response => {
         if (response.status === 200) {
-          const sortedActivities = response.data.activities.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
+          const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
           setActivities(sortedActivities)
           setLoading(false)
         }
