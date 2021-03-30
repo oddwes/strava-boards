@@ -3,7 +3,7 @@ import { getAuthId } from "../utils/PizzlyUtil"
 import { getUser } from "../utils/StravaUtil"
 import { beginningOfMonth, today } from "../utils/DateUtil"
 import DatePicker from "react-datepicker"
-import { Activities } from "./Activities"
+import Activities from "./Activities"
 import { Container, Col, Row } from "react-bootstrap";
 
 import "react-datepicker/dist/react-datepicker.css";
