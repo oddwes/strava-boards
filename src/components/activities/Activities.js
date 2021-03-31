@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { getAuthId } from "../utils/PizzlyUtil"
-import { getActivities } from "../utils/StravaUtil"
-import { Table } from 'react-bootstrap'
-import { css } from "@emotion/react";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import Totals from "./activities/Totals"
-import RideData from './activities/RideData';
+import { getAuthId } from "../../utils/PizzlyUtil"
+import { getActivities } from "../../utils/StravaUtil"
+import { beginningOfMonth, today } from "../../utils/DateUtil"
+import { Container, Col, Row, Table } from 'react-bootstrap'
+import { css } from "@emotion/react"
+import DatePicker from "react-datepicker"
+import PropagateLoader from "react-spinners/PropagateLoader"
+import Totals from "./Totals"
+import RideData from './RideData'
 
-const Activities = ({ startDate, endDate }) => {
+const Activities = () => {
+  const [startDate, setStartDate] = useState(beginningOfMonth())
+  const [endDate, setEndDate] = useState(new Date())
   const [activityData, setactivityData] = useState([])
   const [selectedRideType, setSelectedRideType] = useState({})
   const [selectedVisibility, setSelectedVisibility] = useState({})
@@ -74,26 +78,36 @@ const Activities = ({ startDate, endDate }) => {
         loading ? (
           <PropagateLoader color="#000000" loading={true} css={override} />
         ) : (
-          <React.Fragment>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Ride Name</th>
-                  <th>Date</th>
-                  <th>Moving Time</th>
-                  <th>Elapsed Time</th>
-                  <th>Distance</th>
-                  <th>Elevation</th>
-                  <th>{rideTypeFilter()}</th>
-                  <th>{visibilityFilter()}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <RideData activityData={activityData} />
-              </tbody>
-            </Table>
-            <Totals activityData={activityData} />
-          </React.Fragment>
+          <Container fluid>
+            <Row className="justify-content-md-center p-4">
+              <Col lg="2">
+                Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => setStartDate(date)} />
+              </Col>
+              <Col lg="2">
+                End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
+              </Col>
+            </Row>
+            <div>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Ride Name</th>
+                    <th>Date</th>
+                    <th>Moving Time</th>
+                    <th>Elapsed Time</th>
+                    <th>Distance</th>
+                    <th>Elevation</th>
+                    <th>{rideTypeFilter()}</th>
+                    <th>{visibilityFilter()}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <RideData activityData={activityData} />
+                </tbody>
+              </Table>
+              <Totals activityData={activityData} />
+            </div>
+          </Container>
         )
       }
     </React.Fragment>
