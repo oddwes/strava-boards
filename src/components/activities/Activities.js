@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getAuthId } from "../../utils/PizzlyUtil"
 import { getActivities } from "../../utils/StravaUtil"
-import { beginningOfMonth, today } from "../../utils/DateUtil"
+import { nMonthsAgo, today } from "../../utils/DateUtil"
 import { Container, Col, Row, Table } from 'react-bootstrap'
 import { css } from "@emotion/react"
 import DatePicker from "react-datepicker"
@@ -12,7 +12,7 @@ import RideData from './RideData'
 import "react-datepicker/dist/react-datepicker.css";
 
 const Activities = () => {
-  const [startDate, setStartDate] = useState(beginningOfMonth())
+  const [startDate, setStartDate] = useState(nMonthsAgo(1))
   const [endDate, setEndDate] = useState(new Date())
   const [activityData, setActivityData] = useState([])
   const [selectedRideType, setSelectedRideType] = useState({})
@@ -41,11 +41,11 @@ const Activities = () => {
 
   const rideTypeFilter = () => {
     if (selectedRideType?.trainer === "true") {
-      return <React.Fragment><a href="/#" onClick={()=>{setSelectedRideType(null)}} style={{color:"black"}}>Indoor</a> / <a href="/#" onClick={rideTypeChanged}>Outdoor</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={()=>{setSelectedRideType(null)}} style={{color:"black"}}>Indoor</a> / <a href="#" onClick={rideTypeChanged}>Outdoor</a></React.Fragment>
     } else if (selectedRideType?.trainer === "false") {
-      return <React.Fragment><a href="/#" onClick={rideTypeChanged}>Indoor</a> / <a href="/#" onClick={()=>{setSelectedRideType(null)}} style={{color:"black"}}>Outdoor</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={rideTypeChanged}>Indoor</a> / <a href="#" onClick={()=>{setSelectedRideType(null)}} style={{color:"black"}}>Outdoor</a></React.Fragment>
     } else {
-      return <React.Fragment><a href="/#" onClick={rideTypeChanged}>Indoor</a> / <a href="/#" onClick={rideTypeChanged}>Outdoor</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={rideTypeChanged}>Indoor</a> / <a href="#" onClick={rideTypeChanged}>Outdoor</a></React.Fragment>
     }
   }
 
@@ -59,11 +59,11 @@ const Activities = () => {
 
   const visibilityFilter = () => {
     if (selectedVisibility?.visibility === "everyone") {
-      return <React.Fragment><a href="/#" onClick={()=>{setSelectedVisibility(null)}} style={{color:"black"}}>Public</a> / <a href="/#" onClick={visibilityChanged}>Private</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={()=>{setSelectedVisibility(null)}} style={{color:"black"}}>Public</a> / <a href="#" onClick={visibilityChanged}>Private</a></React.Fragment>
     } else if (selectedVisibility?.visibility === "only_me") {
-      return <React.Fragment><a href="/#" onClick={visibilityChanged}>Public</a> / <a href="/#" onClick={()=>{setSelectedVisibility(null)}} style={{color:"black"}}>Private</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={visibilityChanged}>Public</a> / <a href="#" onClick={()=>{setSelectedVisibility(null)}} style={{color:"black"}}>Private</a></React.Fragment>
     } else {
-      return <React.Fragment><a href="/#" onClick={visibilityChanged}>Public</a> / <a href="/#" onClick={visibilityChanged}>Private</a></React.Fragment>
+      return <React.Fragment><a href="#" onClick={visibilityChanged}>Public</a> / <a href="#" onClick={visibilityChanged}>Private</a></React.Fragment>
     }
   }
 

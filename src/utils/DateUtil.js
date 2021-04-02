@@ -9,3 +9,8 @@ export const beginningOfMonth = (date) => {
 export const beginningOfYear = () =>  { return new Date(new Date().getFullYear(), 0, 1) }
 
 export const today = () => { return new Date() }
+
+export const nMonthsAgo = (monthCount) => {
+  let date = new Date();
+  return new Date(date.getFullYear(), date.getMonth() - monthCount, date.getDate());
+}
