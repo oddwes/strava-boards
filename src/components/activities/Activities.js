@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { getAuthId } from "../../utils/PizzlyUtil"
 import { getActivities } from "../../utils/StravaUtil"
 import { nMonthsAgo, today } from "../../utils/DateUtil"
 import { Container, Col, Row, Table } from 'react-bootstrap'
@@ -21,7 +20,7 @@ const Activities = () => {
 
   useEffect(() => {
     setLoading(true)
-    getActivities({ pizzly_auth_id: getAuthId(), after: startDate, before: endDate, filters: Object.assign({}, selectedRideType, selectedVisibility) })
+    getActivities({ after: startDate, before: endDate, filters: Object.assign({}, selectedRideType, selectedVisibility) })
       .then(response => {
         if (response.status === 200) {
           const sortedActivityData = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })

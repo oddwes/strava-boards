@@ -4,6 +4,7 @@ const PIZZLY_HOSTNAME = process.env.REACT_APP_PIZZLY_HOST;
 const PIZZLY_SETUP_ID = process.env.REACT_APP_PIZZLY_SETUP_ID;
 const PIZZLY_SLUG = "strava";
 const AUTH_ID_KEY = "stravaAuthId";
+const ATHLETE_ID_KEY = "athleteId";
 
 const pizzly = new Pizzly({
   host: PIZZLY_HOSTNAME,
@@ -18,15 +19,27 @@ export const login = () => {
     .connect()
     .then(({ authId }) => {
       localStorage.setItem(AUTH_ID_KEY, authId)
-      window.location.href = "/"
+      strava
+        .auth(authId)
+        .get('/athlete')
+        .then((response) => response.json())
+        .then(json => {
+          localStorage.setItem(ATHLETE_ID_KEY, json.id)
+          window.location.href = "/"
+        })
+        .catch(console.error)
     })
     .catch(console.error);
 };
 
 export const isLoggedIn = () => {
-  return localStorage.getItem(AUTH_ID_KEY)
+  return getAuthId() && getAthleteId()
 };
 
 export const getAuthId = () => {
   return localStorage.getItem(AUTH_ID_KEY)
+}
+
+export const getAthleteId = () => {
+  return localStorage.getItem(ATHLETE_ID_KEY)
 }

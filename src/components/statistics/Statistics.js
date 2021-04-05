@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import { getAuthId } from "../../utils/PizzlyUtil"
 import { getPowerRecords, getActivities } from "../../utils/StravaUtil"
 import Select from "react-select"
 import { Container, Col, Row } from "react-bootstrap";
@@ -25,7 +24,7 @@ const Statistics = () => {
     const after = selectedYear.value.split("~")[0]
     const before = selectedYear.value.split("~")[1]
     setLoading(true)
-    getActivities({ pizzly_auth_id: getAuthId(), after: after, before: before })
+    getActivities({ after: after, before: before })
       .then(response => {
         if (response.status === 200) {
           const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
@@ -33,7 +32,7 @@ const Statistics = () => {
           setLoading(false)
         }
       })
-    getPowerRecords({ pizzly_auth_id: getAuthId(), year: selectedYear.label })
+    getPowerRecords({ year: selectedYear.label })
       .then(response => {
         if (response.status === 200) {
           const sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
