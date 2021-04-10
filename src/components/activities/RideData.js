@@ -2,7 +2,7 @@ import React from "react"
 
 const RideData = ({ activityData }) => {
   const activityInfo = activityData.map((activity, index) => (
-    <tr key={index} style={{ backgroundColor: (activity.data.trainer === false) ? "#F2F2F2" : null }}  >
+    <tr key={index} style={{ backgroundColor: (activity.data.visibility === "only_me") ? "#F2F2F2" : null }}  >
       <td><a href={`https://strava.com/activities/${activity.strava_id}`} target="_blank" rel="noreferrer">{activity.data.name}</a></td>
       <td>{activity.created_at}</td>
       <td>{Math.round(activity.data.moving_time / 60)} min</td>

@@ -19,7 +19,7 @@ const Totals = ({ activityData }) => {
           <tbody>
             <tr>
               <td></td>
-              <th>activityData</th>
+              <th>Rides</th>
               <th>{activityData.length}</th>
             </tr>
             <tr>
