@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stravaboards-deployment
+  namespace: public
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stravaboards-workload
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: stravaboards-workload
+    spec:
+      containers:
+      - name: stravaboards-workload
+        image: registry.gitlab.com/oddwes-main/strava-boards
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: gitlab-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stravaboards-workload
+  namespace: public
+spec:
+  selector:
+    app: stravaboards-workload
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: stravaboards-ingress
+  namespace: public
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`stravaboards.oddwes.ca`)
+    kind: Rule
+    services:
+    - name: stravaboards-workload
+      port: 80
+  tls:
+    certResolver: letsencrypt

@@ -24,8 +24,8 @@ deploy:
   environment:
     name: production
   before_script:
-      - sed -ie "s/deploy-date-value/$(date)/g" kubernetes/deployment.yaml
+      - sed -ie "s/deploy-date-value/$(date)/g" kubernetes/pipline_deployment.yaml
       - mkdir -p /root/.kube/ && touch /root/.kube/config
       - echo ${KUBERNETES_KUBE_CONFIG} | base64 -d > ${KUBECONFIG}
   script:
-      - kubectl apply -f kubernetes/deployment.yaml
+      - kubectl apply -f kubernetes/pipline_deployment.yaml
