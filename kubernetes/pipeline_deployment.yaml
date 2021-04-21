@@ -1,20 +1,28 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stravaboards
-  namespace: default
+  name: stravaboards-deployment
+  namespace: public
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 5
+  replicas: 2
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: deployment-default-stravaboards
+      app: stravaboards-workload
+  revisionHistoryLimit: 2
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: stravaboards
+        app: stravaboards-workload
       annotations:
         deploy-date: "deploy-date-value"
+    spec:
+      containers:
+      - name: stravaboards-workload
+        image: registry.gitlab.com/oddwes-main/strava-boards
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: gitlab-auth
