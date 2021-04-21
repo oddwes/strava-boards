@@ -10,8 +10,6 @@ spec:
     matchLabels:
       app: stravaboards-workload
   revisionHistoryLimit: 2
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
