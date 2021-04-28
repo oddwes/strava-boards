@@ -15,6 +15,10 @@ export const getActivities = ({ after, before, filters }) => {
   return axios.get(`${CACHE_HOST}/athlete/activities`, { params: { after: after, before: before, filters: filters}, headers: headers() })
 }
 
+export const getActivity = ({ activityStravaId }) => {
+  return axios.get(`${CACHE_HOST}/activities/${activityStravaId}`, { headers: headers() })
+}
+
 export const getPowerRecords = ({ athleteId, year }) => {
   return axios.get(`${CACHE_HOST}/athlete/power_records`, { params: { year: year }, headers: headers() })
 }

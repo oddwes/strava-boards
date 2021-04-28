@@ -1,6 +1,6 @@
 import React from "react"
 import { Line } from "react-chartjs-2"
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { monthNames, monthIndices } from "../../utils/DateUtil"
 
 const Goals = ({activities}) => {

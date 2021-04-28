@@ -56,7 +56,7 @@ const Statistics = () => {
         ) : (
           <React.Fragment>
             <Goals activities={activities} />
-            <PowerRecords powerStatistics={powerRecords} />
+            <PowerRecords powerStatistics={powerRecords} activities={activities} />
           </React.Fragment>
         )
       }
