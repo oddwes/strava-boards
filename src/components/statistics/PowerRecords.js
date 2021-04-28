@@ -38,9 +38,7 @@ const PowerRecords = ({powerStatistics}) => {
   return (
     <Container>
       <Row>
-        <Col>
-          <Bar data={data} options={options}/>
-        </Col>
+        <Bar data={data} options={options}/>
       </Row>
     </Container>
   )

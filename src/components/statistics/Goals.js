@@ -60,14 +60,12 @@ const Goals = ({activities}) => {
   })
 
   return (
-    <Container fluid>
+    <Container>
       <Row>
-        <Col>
-          <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
-        </Col>
-        <Col>
-          <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
-        </Col>
+        <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
+      </Row>
+      <Row>
+        <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
       </Row>
     </Container>
   )
