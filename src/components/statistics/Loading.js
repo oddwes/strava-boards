@@ -12,14 +12,18 @@ const Loading = () => {
     <Container fluid>
       <Row>
         <Col className="p-4" style={{ display: "flex", alignItems: "center" }}>
-          <ClimbingBoxLoader color="#000000" loading={true} css={override} size={25} />
-        </Col>
-        <Col className="p-4" style={{ display: "flex", alignItems: "center" }}>
-          <BarLoader color="#000000" loading={true} css={override} height={8} width={300} />
+          <ClimbingBoxLoader color="#000000" loading={true} css={override} size={23} />
         </Col>
       </Row>
+      <br/>
       <Row>
-        <ScaleLoader color="#000000" loading={true} css={override} height={175} width={10} radius={10} margin={15} />
+        <Col className="p-4" style={{ display: "flex", alignItems: "center" }}>
+          <BarLoader color="#000000" loading={true} css={override} height={8} width={175} />
+        </Col>
+      </Row>
+      <br/>
+      <Row>
+        <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
       </Row>
     </Container>
   )
