@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Redirect } from "react-router-dom"
 import { login, isLoggedIn } from "../utils/PizzlyUtil"
 import Footer from "./Footer"
@@ -11,6 +11,8 @@ const pizzlyLink = "https://github.com/Bearer/Pizzly"
 const footerText = "Oauth provided by Pizzly"
 
 const Login = () => {
+  const redirected = new URLSearchParams(window.location.search).get('redirected')
+
   return (
     <div className="vertical-center">
       <button className="strava-button" onClick={login}>
@@ -18,7 +20,7 @@ const Login = () => {
         <span style={{fontWeight: "bold"}}>Login</span>
       </button>
       <Footer text={footerText} url={pizzlyLink}/>
-      { isLoggedIn() ? <Redirect to="/" /> : null}
+      { isLoggedIn() && !redirected ? <Redirect to="/" /> : null}
     </div>
   )
 }

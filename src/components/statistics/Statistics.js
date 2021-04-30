@@ -26,18 +26,20 @@ const Statistics = () => {
     setLoading(true)
     getActivities({ after: after, before: before })
       .then(response => {
-        if (response.status === 200) {
-          const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
-          setActivities(sortedActivities)
-          setLoading(false)
-        }
+        const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
+        setActivities(sortedActivities)
+        setLoading(false)
       })
+      .catch(function (error) {
+        if(error.response.status === 401) {
+          window.location.href = "/login?redirected=true"
+        }
+      }
+    )
     getPowerRecords({ year: selectedYear.label })
       .then(response => {
-        if (response.status === 200) {
-          const sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
-          setPowerRecords(sortedPowerRecords)
-        }
+        const sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
+        setPowerRecords(sortedPowerRecords)
       })
   }, [selectedYear])
 
