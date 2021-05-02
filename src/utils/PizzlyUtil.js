@@ -1,4 +1,5 @@
 import Pizzly from 'pizzly-js'
+import { getAthlete } from "../../utils/StravaUtil"
 
 const PIZZLY_HOSTNAME = process.env.REACT_APP_PIZZLY_HOST;
 const PIZZLY_SETUP_ID = process.env.REACT_APP_PIZZLY_SETUP_ID;
@@ -25,6 +26,7 @@ export const login = () => {
         .then((response) => response.json())
         .then(json => {
           localStorage.setItem(ATHLETE_ID_KEY, json.id)
+          getAthlete()
           window.location.href = "/"
         })
         .catch(console.error)

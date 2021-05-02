@@ -7,7 +7,7 @@ const headers = () => {
   return { "Pizzly-Auth-Id": getAuthId(), "Athlete-Id": getAthleteId() }
 }
 
-export const getUser = () => {
+export const getAthlete = () => {
   return axios.get(`${CACHE_HOST}/athlete`, { headers: headers() })
 }
 
