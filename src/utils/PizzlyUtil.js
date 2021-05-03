@@ -1,5 +1,5 @@
 import Pizzly from 'pizzly-js'
-import { getAthlete } from "../../utils/StravaUtil"
+import { getAthlete } from "./StravaUtil"
 
 const PIZZLY_HOSTNAME = process.env.REACT_APP_PIZZLY_HOST;
 const PIZZLY_SETUP_ID = process.env.REACT_APP_PIZZLY_SETUP_ID;
