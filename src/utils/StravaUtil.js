@@ -12,13 +12,17 @@ export const getAthlete = () => {
 }
 
 export const getActivities = ({ after, before, filters }) => {
-  return axios.get(`${CACHE_HOST}/athlete/activities`, { params: { after: after, before: before, filters: filters}, headers: headers() })
+  return axios.get(`${CACHE_HOST}/athlete/activities`, { params: { after: after, before: before, filters: filters }, headers: headers() })
 }
 
-export const getActivity = ({ activityStravaId }) => {
-  return axios.get(`${CACHE_HOST}/activities/${activityStravaId}`, { headers: headers() })
+export const refreshActivity = ({ activityStravaId }) => {
+  return axios.put(`${CACHE_HOST}/activities/${activityStravaId}`, {}, { headers: headers() })
 }
 
-export const getPowerRecords = ({ athleteId, year }) => {
+export const getPowerRecords = ({ year }) => {
   return axios.get(`${CACHE_HOST}/athlete/power_records`, { params: { year: year }, headers: headers() })
+}
+
+export const getActivityPowerRecords = ({ activityId }) => {
+  return axios.get(`${CACHE_HOST}/power_records/${activityId}`, { params: {}, headers: headers() })
 }

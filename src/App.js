@@ -4,6 +4,7 @@ import { isLoggedIn } from "./utils/PizzlyUtil"
 import Login from "./components/Login"
 import Statistics from "./components/statistics/Statistics"
 import Activities from "./components/activities/Activities"
+import Activity from "./components/activities/Activity"
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,6 +32,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Statistics} />
           <Route exact path="/activities" component={Activities} />
+          <Route exact path="/activity" component={Activity} />
           <Route exact path="/login" component={Login} />
         </Switch>
         { !isLoggedIn() ? <Redirect to="/login" /> : null}

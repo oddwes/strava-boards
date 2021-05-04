@@ -105,6 +105,7 @@ const Activities = () => {
                     <th>Elevation</th>
                     <th>{rideTypeFilter()}</th>
                     <th>{visibilityFilter()}</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
