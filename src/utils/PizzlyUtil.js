@@ -15,28 +15,21 @@ const strava = pizzly.integration(PIZZLY_SLUG, {
   setupId: PIZZLY_SETUP_ID
 });
 
-export const login = () => {
-  strava
-    .connect()
-    .then(({ authId }) => {
-      localStorage.setItem(AUTH_ID_KEY, authId)
-      strava
-        .auth(authId)
-        .get('/athlete')
-        .then((response) => response.json())
-        .then(json => {
-          localStorage.setItem(ATHLETE_ID_KEY, json.id)
-          getAthlete()
-          window.location.href = "/"
-        })
-        .catch(console.error)
-    })
-    .catch(console.error);
+export const login = async () => {
+  await strava.connect().then(({ authId }) => { localStorage.setItem(AUTH_ID_KEY, authId) })
+  await strava
+    .auth(getAuthId())
+    .get('/athlete')
+    .then((response) => response.json())
+    .then(json => { localStorage.setItem(ATHLETE_ID_KEY, json.id) })
+  await getAthlete()
+
+  window.location.href = "/"
 };
 
-export const isLoggedIn = () => {
-  return getAuthId() && getAthleteId()
-};
+export const isLoggedIn = async () => {
+  return getAuthId && getAthleteId()
+}
 
 export const getAuthId = () => {
   return localStorage.getItem(AUTH_ID_KEY)

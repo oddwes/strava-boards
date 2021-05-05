@@ -7,8 +7,13 @@ const headers = () => {
   return { "Pizzly-Auth-Id": getAuthId(), "Athlete-Id": getAthleteId() }
 }
 
-export const getAthlete = () => {
-  return axios.get(`${CACHE_HOST}/athlete`, { headers: headers() })
+export const getAthlete = async () => {
+  try {
+    const response = await axios.get(`${CACHE_HOST}/athlete`, { headers: headers() });
+    return response;
+  } catch (message) {
+    return console.error(message);
+  }
 }
 
 export const getActivities = ({ after, before, filters }) => {
