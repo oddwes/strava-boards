@@ -6,7 +6,7 @@ const RideData = ({ activityData }) => {
   const activityInfo = activityData.map((activity, index) => (
     <tr key={index} style={{ backgroundColor: (activity.data.visibility === "only_me") ? "#F2F2F2" : null }}  >
       <td>
-        <Link to={{ pathname: "/activity", state: {activity: activity} }} style={{textDecoration: "none"}}>
+        <Link to={{ pathname: "/activity", state: {activity: activity} }}>
           {activity.data.name}
         </Link>
       </td>

@@ -14,8 +14,8 @@ const App = () => {
     if(isLoggedIn()) {
       return (
         <React.Fragment>
-          <Link to="/" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Statistics |</h3></Link>
-          <Link to="/activities" className="pl-2" style={{textDecoration: "none", color: "white", display: "inline-block"}}><h3>Activities</h3></Link>
+          <Link to="/" style={{color: "white", display: "inline-block"}}><h3>Statistics |</h3></Link>
+          <Link to="/activities" className="pl-2" style={{color: "white", display: "inline-block"}}><h3>Activities</h3></Link>
         </React.Fragment>
       )
     }
