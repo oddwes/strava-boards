@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Button, ButtonGroup, ButtonToolbar, Col, Container, Row } from "react-bootstrap"
+import { Button, ButtonGroup, ButtonToolbar, Container, Row } from "react-bootstrap"
 import { Bar } from "react-chartjs-2"
 import { getActivityPowerRecords, refreshActivity } from "../../utils/StravaUtil"
 
@@ -67,11 +67,11 @@ const Activity = (props) => {
         <ButtonToolbar>
           <ButtonGroup className="mr-2">
             <a href={"/activities"}>
-              <Button className="p-2" variant="light">Back</Button>
+              <Button variant="light">Back</Button>
             </a>
           </ButtonGroup>
           <ButtonGroup>
-            <Button className="p-2" variant="success" onClick={() => { refreshActivity({ activityStravaId: activityData.id }) }}>Refresh</Button>
+            <Button variant="success" onClick={() => { refreshActivity({ activityStravaId: activityData.id }) }}>Refresh</Button>
           </ButtonGroup>
         </ButtonToolbar>
       </Row>

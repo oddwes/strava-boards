@@ -1,7 +1,7 @@
 import React from "react"
 import { Line } from "react-chartjs-2"
 import { Container, Row } from "react-bootstrap";
-import { monthNames, monthIndices } from "../../utils/DateUtil"
+import moment from "moment";
 
 const Goals = ({activities}) => {
 
@@ -25,12 +25,13 @@ const Goals = ({activities}) => {
     }
   }
 
+  const monthIndices = Array.from({length: 12}, (x, i) => i + 1);
   const actualTotal = ({ calculator }) => monthIndices.map(calculator)
   const expectedTotal = ({ goal }) => monthIndices.map((monthIndex) => { return goal / 12 * monthIndex })
 
   const goalData = ({ goal, dataCalculator }) => (
     {
-      labels: monthNames,
+      labels: moment.months(),
       datasets: [
         {
           label: "Required",
