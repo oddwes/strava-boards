@@ -3,25 +3,23 @@ import { getActivities } from "../../utils/StravaUtil"
 import { nMonthsAgo, today } from "../../utils/DateUtil"
 import { Container, Col, Row, Table } from 'react-bootstrap'
 import { css } from "@emotion/react"
-import DatePicker from "react-datepicker"
 import PropagateLoader from "react-spinners/PropagateLoader"
 import Totals from "./Totals"
 import RideData from './RideData'
 
-import "react-datepicker/dist/react-datepicker.css";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
 const Activities = () => {
-  const [startDate, setStartDate] = useState(nMonthsAgo(1))
-  const [endDate, setEndDate] = useState(new Date())
   const [activityData, setActivityData] = useState([])
   const [selectedRideType, setSelectedRideType] = useState({})
   const [selectedVisibility, setSelectedVisibility] = useState({})
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [dateRange, setDateRange] = useState([nMonthsAgo(1), today()]);
 
   useEffect(() => {
     setLoading(true)
-    getActivities({ after: startDate, before: endDate, filters: Object.assign({}, selectedRideType, selectedVisibility) })
-      .then(response => {
+    getActivities({ after: dateRange[0], before: dateRange[1], filters: Object.assign({}, selectedRideType, selectedVisibility) })
+    .then(response => {
         if (response.status === 200) {
           const sortedActivityData = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
           setActivityData(sortedActivityData)
@@ -33,7 +31,7 @@ const Activities = () => {
           window.location.href = "/login?redirected=true"
         }
       })
-  }, [startDate, endDate, selectedRideType, selectedVisibility])
+  }, [dateRange, selectedRideType, selectedVisibility])
 
   const rideTypeChanged = selected => {
     if (selected.target.innerText === "Indoor") {
@@ -85,13 +83,8 @@ const Activities = () => {
           <PropagateLoader color="#000000" loading={true} css={override} />
         ) : (
           <Container fluid>
-            <Row className="justify-content-md-center p-4">
-              <Col lg="2">
-                Start: <DatePicker selected={startDate} maxDate={endDate} onChange={date => setStartDate(date)} />
-              </Col>
-              <Col lg="2">
-                End: <DatePicker selected={endDate} minDate={startDate} maxDate={today()} onChange={date => setEndDate(date)} />
-              </Col>
+            <Row className="justify-content-md-center pb-4">
+              <DateRangePicker onChange={setDateRange} value={dateRange} calendarType={"US"} clearIcon={null} format={"y/MM/dd"}/>
             </Row>
             <div>
               <Table>
