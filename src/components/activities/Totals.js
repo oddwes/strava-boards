@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap'
 const Totals = ({ activityData }) => {
   const totalDistance = (activityData.map((activity) => activity.data.distance).reduce((a, b) => a + b, 0) / 1000).toFixed(2)
   const totalElevation = activityData.map((activity) => activity.data.total_elevation_gain).reduce((a, b) => a + b, 0)
+  const totalDuration = (activityData.map((activity) => activity.data.moving_time).reduce((a, b) => a + b, 0) / 3600).toFixed(2)
 
   return (
     <React.Fragment>
@@ -31,6 +32,11 @@ const Totals = ({ activityData }) => {
               <td></td>
               <th>Elevation</th>
               <td>{totalElevation} m</td>
+            </tr>
+            <tr>
+              <td></td>
+              <th>Time</th>
+              <td>{totalDuration} hours</td>
             </tr>
           </tbody>
         </Table>
