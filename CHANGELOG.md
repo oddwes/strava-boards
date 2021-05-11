@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.23](https://gitlab.com/oddwes/strava-boards/compare/v0.1.22...v0.1.23) (2021-05-11)
+
 ### [0.1.22](https://gitlab.com/oddwes/strava-boards/compare/v0.1.21...v0.1.22) (2021-05-05)
 
 ### [0.1.21](https://gitlab.com/oddwes/strava-boards/compare/v0.1.20...v0.1.21) (2021-05-04)
