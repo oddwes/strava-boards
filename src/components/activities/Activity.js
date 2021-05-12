@@ -1,82 +1,46 @@
 import React, { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import { Button, ButtonGroup, ButtonToolbar, Container, Row } from "react-bootstrap"
-import { Bar } from "react-chartjs-2"
-import { getActivityPowerRecords, refreshActivity } from "../../utils/StravaUtil"
+import { getActivityPowerRecords, getActivity, refreshActivity } from "../../utils/StravaUtil"
+import PowerRecords from "../statistics/PowerRecords"
 
 const Activity = (props) => {
-  const activityData = props.location.state.activity
+  const activityId = useParams().id
+  const [activity, setActivity] = useState(null)
   const [powerStatistics, setPowerStatistics] = useState([])
 
   useEffect(() => {
-    getActivityPowerRecords({ activityId: activityData.id })
+    getActivity({ activityId: activityId })
+      .then(response => {
+        setActivity(response.data)
+      })
+    getActivityPowerRecords({ activityId: activityId })
       .then(response => {
         if (response.status === 200) {
           setPowerStatistics(response.data)
         }
       })
-      .catch(function (error) {
-        if (error.response.status === 401) {
-          window.location.href = "/login?redirected=true"
-        }
-      })
   }, [])
-
-  const data = {
-    labels: powerStatistics.map((powerRecord) => {
-      if (powerRecord.duration < 60) {
-        return `${powerRecord.duration} seconds`
-      } else if (powerRecord.duration === 60) {
-        return "1 minute"
-      } else {
-        return `${powerRecord.duration / 60} minutes`
-      }
-    }),
-    datasets: [
-      {
-        data: powerStatistics.map((powerRecord) => { return powerRecord.power }),
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-      },
-    ],
-  }
-
-  const options = {
-    title: { display: true, text: 'Power Records', fontSize: 24 },
-    legend: { display: false },
-    tooltips: { enabled: false },
-    plugins: {
-      datalabels: {
-        display: true,
-      }
-    },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-  }
 
   return (
     <Container>
+      <h1 style={{color: "#666666"}}>{activity?.title}</h1>
+      <h4 style={{color: "#666666"}}>{activity?.data?.description}</h4>
+      <hr />
       <Row>
-        <ButtonToolbar>
+        <ButtonToolbar className="pb-4">
           <ButtonGroup className="mr-2">
             <a href={"/activities"}>
               <Button variant="light">Back</Button>
             </a>
           </ButtonGroup>
           <ButtonGroup>
-            <Button variant="success" onClick={() => { refreshActivity({ activityStravaId: activityData.id }) }}>Refresh</Button>
+            <Button variant="success" onClick={() => { refreshActivity({ activityStravaId: activityId }) }}>Refresh</Button>
           </ButtonGroup>
         </ButtonToolbar>
       </Row>
       <Row>
-        <Bar data={data} options={options} />
+        <PowerRecords powerStatistics={powerStatistics} tooltips={{ enabled: false }}/>
       </Row>
     </Container>
   )

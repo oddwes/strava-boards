@@ -1,39 +1,34 @@
 import React from "react"
 import { Bar } from "react-chartjs-2"
-import { Container, Row } from "react-bootstrap";
-const PowerRecords = ({powerStatistics, activities}) => {
-  const associatedActivities = powerStatistics.map((powerRecord) => {
-    return activities.find((activity) => { return activity.id === powerRecord.data.activity_id });
-  })
+import { Container, Row } from "react-bootstrap"
+import ScaleLoader from "react-spinners/ScaleLoader"
+import { css } from "@emotion/react"
+
+const PowerRecords = ({ powerStatistics, tooltips }) => {
 
   const data = {
     labels: powerStatistics.map((powerRecord) => {
-      if(powerRecord.duration < 60) {
+      if (powerRecord.duration < 60) {
         return `${powerRecord.duration} seconds`
-      } else if(powerRecord.duration === 60){
+      } else if (powerRecord.duration === 60) {
         return "1 minute"
       } else {
-        return `${powerRecord.duration/60} minutes`
+        return `${powerRecord.duration / 60} minutes`
       }
     }),
     datasets: [
       {
-        data: powerStatistics.map((powerRecord) => { return powerRecord.data.power }),
+        data: powerStatistics.map((powerRecord) => { return powerRecord.power }),
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
     ],
   }
+
   const options = {
-    tooltips: {
-      callbacks: {
-        title: function(tooltipItem, data) {
-          return `${associatedActivities[tooltipItem[0].index]?.title} (${associatedActivities[tooltipItem[0].index]?.created_at.split(' ')[0]})`
-        }
-      },
-    },
-    title: { display: true, text: 'Power Records', fontSize: 24 },
+    tooltips: tooltips || {},
+    title: { display: true, position: "bottom", text: 'Power Records', fontSize: 24 },
     legend: { display: false },
     plugins: {
       datalabels: {
@@ -51,11 +46,22 @@ const PowerRecords = ({powerStatistics, activities}) => {
     },
   }
 
+  const override = css`display: block;margin: auto;border-color: red;`;
+
   return (
     <Container>
-      <Row>
-        <Bar data={data} options={options}/>
-      </Row>
+      {
+        (powerStatistics.length !== 0) ? (
+          <Row>
+            <Bar data={data} options={options} />
+          </Row>
+        ) : (
+          <React.Fragment>
+            <h3>Calculating power records ...</h3>
+            <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
+          </React.Fragment>
+        )
+      }
     </Container>
   )
 }

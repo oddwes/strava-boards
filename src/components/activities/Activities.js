@@ -26,11 +26,6 @@ const Activities = () => {
           setLoading(false)
         }
       })
-      .catch(function (error) {
-        if (error.response.status === 401) {
-          window.location.href = "/login?redirected=true"
-        }
-      })
   }, [dateRange, selectedRideType, selectedVisibility])
 
   const updateDateRange = (start, end) => {

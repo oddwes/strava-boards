@@ -19,6 +19,7 @@ const Statistics = () => {
   const [powerRecords, setPowerRecords] = useState([])
   const [selectedYear, setSelectedYear] = useState(years[0])
   const [loading, setLoading] = useState(true)
+  const [tooltips, setTooltips] = useState(null)
 
   useEffect(() => {
     const after = selectedYear.value.split("~")[0]
@@ -28,24 +29,30 @@ const Statistics = () => {
       .then(response => {
         const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
         setActivities(sortedActivities)
-        setLoading(false)
-      })
-      .catch(function (error) {
-        if(error.response.status === 401) {
-          window.location.href = "/login?redirected=true"
-        }
-      }
-    )
-    getPowerRecords({ year: selectedYear.label })
-      .then(response => {
-        const sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
-        setPowerRecords(sortedPowerRecords)
+        getPowerRecords({ year: selectedYear.label })
+          .then(response => {
+            let sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
+            sortedPowerRecords = sortedPowerRecords.map(powerRecord => powerRecord.data)
+            setPowerRecords(sortedPowerRecords)
+
+            const associatedActivities = sortedPowerRecords.map((powerRecord) => {
+              return sortedActivities.find((activity) => { return activity.id === powerRecord.activity_id });
+            })
+            setTooltips({
+              callbacks: {
+                title: function(tooltipItem, data) {
+                  return `${associatedActivities[tooltipItem[0].index]?.title} (${associatedActivities[tooltipItem[0].index]?.created_at.split(' ')[0]})`
+                }
+              }
+            })
+            setLoading(false)
+          })
       })
   }, [selectedYear])
 
   return (
     <React.Fragment>
-      <Container>
+      <Container className="pb-2">
         <Row className="justify-content-md-center">
           <Col xs lg="2">
             <Select options={years} value={selectedYear} onChange={(selected) => { setSelectedYear(selected) }} />
@@ -58,7 +65,7 @@ const Statistics = () => {
         ) : (
           <React.Fragment>
             <Goals activities={activities} />
-            <PowerRecords powerStatistics={powerRecords} activities={activities} />
+            <PowerRecords powerStatistics={powerRecords} tooltips={tooltips} />
           </React.Fragment>
         )
       }

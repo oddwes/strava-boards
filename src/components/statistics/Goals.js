@@ -51,8 +51,8 @@ const Goals = ({activities}) => {
   )
 
   const options = ({ title }) => ({
-    title: { display: true, text: title, fontSize: 24 },
-    legend: { position: "bottom" },
+    title: { display: true, position: "bottom", text: title, fontSize: 24 },
+    legend: { display: false },
     plugins: {
       datalabels: {
          display: false,
@@ -62,10 +62,10 @@ const Goals = ({activities}) => {
 
   return (
     <Container>
-      <Row>
+      <Row className="pb-4">
         <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
       </Row>
-      <Row>
+      <Row className="pb-4">
         <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
       </Row>
     </Container>

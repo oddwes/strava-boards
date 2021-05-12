@@ -28,7 +28,7 @@ export const login = async () => {
 };
 
 export const isLoggedIn = async () => {
-  return getAuthId && getAthleteId()
+  return getAuthId() && getAthleteId()
 }
 
 export const getAuthId = () => {

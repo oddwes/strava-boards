@@ -32,7 +32,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Statistics} />
           <Route exact path="/activities" component={Activities} />
-          <Route exact path="/activity" component={Activity} />
+          <Route exact path="/activities/:id" component={Activity} />
           <Route exact path="/login" component={Login} />
         </Switch>
         { !isLoggedIn() ? <Redirect to="/login" /> : null}
