@@ -2,8 +2,9 @@ import React from "react"
 import { Line } from "react-chartjs-2"
 import { Container, Row } from "react-bootstrap";
 import moment from "moment";
+import { DistanceLoading, MetersLoading } from "./Loading";
 
-const Goals = ({activities}) => {
+const Goals = ({activities, loading}) => {
 
   const monthlyMetersCalculator = (monthIndex) => {
     let activitiesForTheMonth = activities.filter((activity) => activity.data.start_date.split("-")[1] <= String(monthIndex).padStart(2, "0"))
@@ -62,12 +63,28 @@ const Goals = ({activities}) => {
 
   return (
     <Container>
-      <Row className="pb-4">
-        <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
-      </Row>
-      <Row className="pb-4">
-        <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
-      </Row>
+      {
+        loading ? (
+          <React.Fragment>
+            <Row className="pt-2">
+              <MetersLoading />
+            </Row>
+            <br />
+            <Row className="pt-2">
+              <DistanceLoading />
+            </Row>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Row className="pb-2">
+              <Line data={goalData({ goal: 100000, dataCalculator: monthlyMetersCalculator })} options={options({ title: "Elevation" })} />
+            </Row>
+            <Row>
+              <Line data={goalData({ goal: 10000, dataCalculator: monthlyDistanceCalculator })} options={options({ title: "Distance" })} />
+            </Row>
+          </React.Fragment>
+        )
+      }
     </Container>
   )
 }

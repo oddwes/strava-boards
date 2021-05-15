@@ -3,9 +3,9 @@ import { Bar } from "react-chartjs-2"
 import { Container, Row } from "react-bootstrap"
 import ScaleLoader from "react-spinners/ScaleLoader"
 import { css } from "@emotion/react"
+import { PowerLoading } from "./Loading"
 
-const PowerRecords = ({ powerStatistics, tooltips }) => {
-
+const PowerRecords = ({ powerStatistics, tooltips, loading }) => {
   const data = {
     labels: powerStatistics.map((powerRecord) => {
       if (powerRecord.duration < 60) {
@@ -51,15 +51,21 @@ const PowerRecords = ({ powerStatistics, tooltips }) => {
   return (
     <Container>
       {
-        (powerStatistics.length !== 0) ? (
+        loading ? (
           <Row>
-            <Bar data={data} options={options} />
+            <PowerLoading />
           </Row>
         ) : (
-          <React.Fragment>
-            <h3>Calculating power records ...</h3>
-            <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
-          </React.Fragment>
+          (powerStatistics.length !== 0) ? (
+            <Row>
+              <Bar data={data} options={options} />
+            </Row>
+          ) : (
+            <React.Fragment>
+              <h3>Calculating power records ...</h3>
+              <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
+            </React.Fragment>
+          )
         )
       }
     </Container>

@@ -3,7 +3,6 @@ import { getPowerRecords, getActivities } from "../../utils/StravaUtil"
 import Select from "react-select"
 import { Container, Col, Row } from "react-bootstrap";
 import PowerRecords from "./PowerRecords"
-import Loading from "./Loading"
 import Goals from "./Goals"
 
 import 'chartjs-plugin-datalabels';
@@ -17,59 +16,64 @@ const Statistics = () => {
 
   const [activities, setActivities] = useState([])
   const [powerRecords, setPowerRecords] = useState([])
-  const [selectedYear, setSelectedYear] = useState(years[0])
-  const [loading, setLoading] = useState(true)
+  const [goalsYear, setGoalsYear] = useState(years[0])
+  const [goalsLoading, setGoalsLoading] = useState(true)
+  const [powerYear, setPowerYear] = useState(years[0])
+  const [powerLoading, setPowerLoading] = useState(true)
+
   const [tooltips, setTooltips] = useState(null)
 
   useEffect(() => {
-    const after = selectedYear.value.split("~")[0]
-    const before = selectedYear.value.split("~")[1]
-    setLoading(true)
+    const after = goalsYear.value.split("~")[0]
+    const before = goalsYear.value.split("~")[1]
+    setGoalsLoading(true)
     getActivities({ after: after, before: before })
       .then(response => {
         const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
         setActivities(sortedActivities)
-        getPowerRecords({ year: selectedYear.label })
-          .then(response => {
-            let sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
-            sortedPowerRecords = sortedPowerRecords.map(powerRecord => powerRecord.data)
-            setPowerRecords(sortedPowerRecords)
-
-            const associatedActivities = sortedPowerRecords.map((powerRecord) => {
-              return sortedActivities.find((activity) => { return activity.id === powerRecord.activity_id });
-            })
-            setTooltips({
-              callbacks: {
-                title: function(tooltipItem, data) {
-                  return `${associatedActivities[tooltipItem[0].index]?.title} (${associatedActivities[tooltipItem[0].index]?.created_at.split(' ')[0]})`
-                }
-              }
-            })
-            setLoading(false)
-          })
+        setGoalsLoading(false)
       })
-  }, [selectedYear])
+  }, [goalsYear])
+
+  useEffect(() => {
+    setPowerLoading(true)
+    getPowerRecords({ year: powerYear.value?.split("-")[0] })
+      .then(response => {
+        let sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
+        setPowerRecords(sortedPowerRecords)
+
+        setTooltips({
+          callbacks: {
+            title: function(tooltipItem, data) {
+              return `${sortedPowerRecords[tooltipItem[0].index].activity_title} (${sortedPowerRecords[tooltipItem[0].index]?.activity_date.split(' ')[0]})`
+            }
+          }
+        })
+        setPowerLoading(false)
+      })
+  }, [powerYear])
 
   return (
-    <React.Fragment>
-      <Container className="pb-2">
-        <Row className="justify-content-md-center">
-          <Col xs lg="2">
-            <Select options={years} value={selectedYear} onChange={(selected) => { setSelectedYear(selected) }} />
-          </Col>
-        </Row>
-      </Container>
-      {
-        loading ? (
-          <Loading />
-        ) : (
-          <React.Fragment>
-            <Goals activities={activities} />
-            <PowerRecords powerStatistics={powerRecords} tooltips={tooltips} />
-          </React.Fragment>
-        )
-      }
-    </React.Fragment>
+    <Container fluid>
+      <Row>
+        <Col>
+          <Row className="justify-content-md-center">
+            <Col xs lg="2">
+              <Select options={years} value={goalsYear} onChange={(selected) => { setGoalsYear(selected) }} />
+            </Col>
+          </Row>
+          <Goals activities={activities} loading={goalsLoading} />
+        </Col>
+        <Col>
+          <Row className="justify-content-md-center">
+            <Col xs lg="2">
+              <Select options={years.concat({value: "", label: "All Time"})} value={powerYear} onChange={(selected) => { setPowerYear(selected) }} />
+            </Col>
+          </Row>
+          <PowerRecords powerStatistics={powerRecords} tooltips={tooltips} loading={powerLoading}/>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
