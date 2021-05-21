@@ -2,7 +2,7 @@ import React from "react"
 import { Line } from "react-chartjs-2"
 import { Container, Row } from "react-bootstrap";
 import moment from "moment";
-import { DistanceLoading, MetersLoading } from "./Loading";
+import { MetersLoading } from "./Loading";
 
 const Goals = ({activities, loading}) => {
 
@@ -66,12 +66,8 @@ const Goals = ({activities, loading}) => {
       {
         loading ? (
           <React.Fragment>
-            <Row className="pt-2">
+            <Row className="pt-4">
               <MetersLoading />
-            </Row>
-            <br />
-            <Row className="pt-2">
-              <DistanceLoading />
             </Row>
           </React.Fragment>
         ) : (

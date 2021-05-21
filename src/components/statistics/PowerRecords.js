@@ -62,7 +62,6 @@ const PowerRecords = ({ powerStatistics, tooltips, loading }) => {
             </Row>
           ) : (
             <React.Fragment>
-              <h3>Calculating power records ...</h3>
               <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
             </React.Fragment>
           )
