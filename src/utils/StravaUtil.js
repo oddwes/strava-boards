@@ -17,6 +17,10 @@ export const getAthlete = async () => {
   }
 }
 
+export const syncActivitiesForYear = ({ year }) => {
+  return axios.post(`${CACHE_HOST}/athlete/sync_activities`, { year: year }, { headers: headers() })
+}
+
 export const getActivities = ({ after, before, filters }) => {
   return axios.get(`${CACHE_HOST}/athlete/activities`, { params: { after: after, before: before, filters: filters }, headers: headers() })
 }
@@ -39,7 +43,7 @@ export const getActivityPowerRecords = ({ activityId }) => {
 
 axiosRetry(axios, {
   retries: Infinity,
-  retryDelay: (_) => { return 2500 },
+  retryDelay: (retryCount) => { return 1000 },
   retryCondition: (error) => {
     return error.response.status === 307
   },

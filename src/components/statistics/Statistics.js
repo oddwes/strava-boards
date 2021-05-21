@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { getPowerRecords, getActivities } from "../../utils/StravaUtil"
+import { syncActivitiesForYear, getActivities, getPowerRecords } from "../../utils/StravaUtil"
 import Select from "react-select"
 import { Container, Col, Row } from "react-bootstrap";
 import PowerRecords from "./PowerRecords"
@@ -12,6 +12,8 @@ const Statistics = () => {
     { value: "2021-01-01~2021-12-31", label: "2021" },
     { value: "2020-01-01~2020-12-31", label: "2020" },
     { value: "2019-01-01~2019-12-31", label: "2019" },
+    { value: "2018-01-01~2018-12-31", label: "2018" },
+    { value: "2017-01-01~2017-12-31", label: "2017" },
   ];
 
   const [activities, setActivities] = useState([])
@@ -23,17 +25,7 @@ const Statistics = () => {
 
   const [tooltips, setTooltips] = useState(null)
 
-  useEffect(() => {
-    const after = goalsYear.value.split("~")[0]
-    const before = goalsYear.value.split("~")[1]
-    setGoalsLoading(true)
-    getActivities({ after: after, before: before })
-      .then(response => {
-        const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
-        setActivities(sortedActivities)
-        setGoalsLoading(false)
-      })
-  }, [goalsYear])
+  useEffect(() => { updateActivities() }, [goalsYear])
 
   useEffect(() => {
     setPowerLoading(true)
@@ -44,7 +36,7 @@ const Statistics = () => {
 
         setTooltips({
           callbacks: {
-            title: function(tooltipItem, data) {
+            title: function (tooltipItem, data) {
               return `${sortedPowerRecords[tooltipItem[0].index].activity_title} (${sortedPowerRecords[tooltipItem[0].index]?.activity_date.split(' ')[0]})`
             }
           }
@@ -52,6 +44,26 @@ const Statistics = () => {
         setPowerLoading(false)
       })
   }, [powerYear])
+
+  const updateActivities = () => {
+    const after = goalsYear.value.split("~")[0]
+    const before = goalsYear.value.split("~")[1]
+    setGoalsLoading(true)
+    getActivities({ after: after, before: before })
+      .then(response => {
+        console.log(response)
+        if (response.data.length === 0) {
+          syncActivitiesForYear({ year: goalsYear.label })
+            .then(response => {
+              updateActivities()
+            })
+        } else {
+          const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
+          setActivities(sortedActivities)
+          setGoalsLoading(false)
+        }
+      })
+  }
 
   return (
     <Container fluid>
@@ -67,10 +79,10 @@ const Statistics = () => {
         <Col>
           <Row className="justify-content-md-center">
             <Col xs lg="2">
-              <Select options={years.concat({value: "", label: "All Time"})} value={powerYear} onChange={(selected) => { setPowerYear(selected) }} />
+              <Select options={years.concat({ value: "", label: "All Time" })} value={powerYear} onChange={(selected) => { setPowerYear(selected) }} />
             </Col>
           </Row>
-          <PowerRecords powerStatistics={powerRecords} tooltips={tooltips} loading={powerLoading}/>
+          <PowerRecords powerStatistics={powerRecords} tooltips={tooltips} loading={powerLoading} />
         </Col>
       </Row>
     </Container>
