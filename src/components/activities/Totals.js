@@ -1,10 +1,11 @@
 import React from "react"
 import { Table } from 'react-bootstrap'
+import { formatDuration } from "../../utils/TimeUtil"
 
 const Totals = ({ activityData }) => {
   const totalDistance = (activityData.map((activity) => activity.data.distance).reduce((a, b) => a + b, 0) / 1000).toFixed(2)
   const totalElevation = activityData.map((activity) => activity.data.total_elevation_gain).reduce((a, b) => a + b, 0)
-  const totalDuration = (activityData.map((activity) => activity.data.moving_time).reduce((a, b) => a + b, 0) / 3600).toFixed(2)
+  const totalDuration = (activityData.map((activity) => activity.data.moving_time)).reduce((a, b) => a + b, 0)
 
   return (
     <React.Fragment>
@@ -36,7 +37,7 @@ const Totals = ({ activityData }) => {
             <tr>
               <td></td>
               <th>Time</th>
-              <td>{totalDuration} hours</td>
+              <td>{formatDuration({duration: totalDuration})}</td>
             </tr>
           </tbody>
         </Table>

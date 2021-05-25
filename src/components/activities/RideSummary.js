@@ -1,8 +1,9 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { Button } from "react-bootstrap"
+import { formatDuration } from "../../utils/TimeUtil"
 
-const RideData = ({ activityData }) => {
+const RideSummary = ({ activityData }) => {
   const activityInfo = activityData.map((activity, index) => (
     <tr key={index} style={{ backgroundColor: (activity.data.visibility === "only_me") ? "#F2F2F2" : null }}  >
       <td>
@@ -11,8 +12,8 @@ const RideData = ({ activityData }) => {
         </Link>
       </td>
       <td>{activity.created_at}</td>
-      <td>{Math.round(activity.data.moving_time / 60)} min</td>
-      <td>{Math.round(activity.data.elapsed_time / 60)} min</td>
+      <td>{formatDuration({duration: activity.data.moving_time})}</td>
+      <td>{formatDuration({duration: activity.data.elapsed_time})}</td>
       <td>{(activity.data.distance / 1000).toFixed(2)} km</td>
       <td>{activity.data.total_elevation_gain} m</td>
       <td>{(activity.data.trainer === true) ? "Indoor" : "Outdoor"}</td>
@@ -32,4 +33,4 @@ const RideData = ({ activityData }) => {
   )
 }
 
-export default RideData
+export default RideSummary

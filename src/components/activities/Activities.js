@@ -4,7 +4,7 @@ import { Button, ButtonGroup, ButtonToolbar, Container, Row, Table } from 'react
 import { css } from "@emotion/react"
 import PropagateLoader from "react-spinners/PropagateLoader"
 import Totals from "./Totals"
-import RideData from './RideData'
+import RideSummary from './RideSummary'
 import moment from 'moment'
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
@@ -145,7 +145,7 @@ const Activities = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <RideData activityData={activityData} />
+                  <RideSummary activityData={activityData} />
                 </tbody>
               </Table>
               <Totals activityData={activityData} />
