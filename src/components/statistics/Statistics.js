@@ -27,23 +27,7 @@ const Statistics = () => {
 
   useEffect(() => { updateActivities() }, [goalsYear])
 
-  useEffect(() => {
-    setPowerLoading(true)
-    getPowerRecords({ year: powerYear.value?.split("-")[0] })
-      .then(response => {
-        let sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
-        setPowerRecords(sortedPowerRecords)
-
-        setTooltips({
-          callbacks: {
-            title: function (tooltipItem, data) {
-              return `${sortedPowerRecords[tooltipItem[0].index].activity_title} (${sortedPowerRecords[tooltipItem[0].index]?.activity_date.split(' ')[0]})`
-            }
-          }
-        })
-        setPowerLoading(false)
-      })
-  }, [powerYear])
+  useEffect(() => { updatePowerRecords() }, [powerYear])
 
   const updateActivities = () => {
     const after = goalsYear.value.split("~")[0]
@@ -51,7 +35,6 @@ const Statistics = () => {
     setGoalsLoading(true)
     getActivities({ after: after, before: before })
       .then(response => {
-        console.log(response)
         if (response.data.length === 0) {
           syncActivitiesForYear({ year: goalsYear.label })
             .then(response => {
@@ -61,6 +44,28 @@ const Statistics = () => {
           const sortedActivities = response.data.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at) })
           setActivities(sortedActivities)
           setGoalsLoading(false)
+        }
+      })
+  }
+
+  const updatePowerRecords = () => {
+    setPowerLoading(true)
+    getPowerRecords({ year: powerYear.value?.split("-")[0] })
+      .then(response => {
+        if (response.data.length === 0) {
+          syncActivitiesForYear({ year: powerYear.label }).then(_ => { updatePowerRecords() })
+        } else {
+          let sortedPowerRecords = response.data.sort(function (a, b) { return new Date(a.duration) - new Date(b.duration) })
+          setPowerRecords(sortedPowerRecords)
+
+          setTooltips({
+            callbacks: {
+              title: function (tooltipItem, data) {
+                return `${sortedPowerRecords[tooltipItem[0].index].activity_title} (${sortedPowerRecords[tooltipItem[0].index]?.activity_date.split(' ')[0]})`
+              }
+            }
+          })
+          setPowerLoading(false)
         }
       })
   }

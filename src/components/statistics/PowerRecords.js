@@ -1,21 +1,12 @@
 import React from "react"
 import { Bar } from "react-chartjs-2"
 import { Container, Row } from "react-bootstrap"
-import ScaleLoader from "react-spinners/ScaleLoader"
-import { css } from "@emotion/react"
 import { PowerLoading } from "./Loading"
+import { formatDuration } from "../../utils/TimeUtil"
 
-const PowerRecords = ({ powerStatistics, tooltips, loading }) => {
+const PowerRecords = ({ powerStatistics, tooltips, loading, powerProgress }) => {
   const data = {
-    labels: powerStatistics.map((powerRecord) => {
-      if (powerRecord.duration < 60) {
-        return `${powerRecord.duration} seconds`
-      } else if (powerRecord.duration === 60) {
-        return "1 minute"
-      } else {
-        return `${powerRecord.duration / 60} minutes`
-      }
-    }),
+    labels: powerStatistics.map((powerRecord) => { return formatDuration({duration: powerRecord.duration}) }),
     datasets: [
       {
         data: powerStatistics.map((powerRecord) => { return powerRecord.power }),
@@ -46,27 +37,11 @@ const PowerRecords = ({ powerStatistics, tooltips, loading }) => {
     },
   }
 
-  const override = css`display: block;margin: auto;border-color: red;`;
-
   return (
     <Container>
-      {
-        loading ? (
-          <Row>
-            <PowerLoading />
-          </Row>
-        ) : (
-          (powerStatistics.length !== 0) ? (
-            <Row>
-              <Bar data={data} options={options} />
-            </Row>
-          ) : (
-            <React.Fragment>
-              <ScaleLoader color="#000000" loading={true} css={override} height={125} width={8} radius={10} margin={10} />
-            </React.Fragment>
-          )
-        )
-      }
+      <Row>
+        { loading ? (<PowerLoading progress={powerProgress} />) : (<Bar data={data} options={options} />) }
+      </Row>
     </Container>
   )
 }

@@ -1,5 +1,5 @@
-import axios from "axios";
 import { getAuthId, getAthleteId } from "./PizzlyUtil"
+import axios from "axios";
 import axiosRetry from 'axios-retry';
 
 const CACHE_HOST = process.env.REACT_APP_CACHE_HOST;
@@ -50,10 +50,8 @@ axiosRetry(axios, {
 });
 
 axios.interceptors.response.use(
-  function(response) {
-    return response
-  },
-  function(error) {
+  response => { return response },
+  error => {
     if (error.response.status === 401) {
       window.location.href = "/login?redirected=true"
     }
